@@ -94,6 +94,10 @@ void handle_tools() {
   addWideButtonPlusDescription(F("sysvars"), F("System Variables"), F("Show all system variables and conversions"));
   # endif // ifdef WEBSERVER_SYSVARS
 
+  #ifdef WEBSERVER_MY
+  addWideButtonPlusDescription(F("mypage"), F("My Page"), F("Open custom control page"));
+  #endif // WEBSERVER_MY
+
   addFormSubHeader(F("Wifi"));
 
   addWideButtonPlusDescription(F("/?cmd=wificonnect"),    F("Connect"),    F("Connects to known Wifi network"));

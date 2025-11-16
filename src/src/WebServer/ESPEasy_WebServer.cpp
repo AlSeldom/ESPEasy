@@ -68,6 +68,8 @@
 
 #include "../Static/WebStaticData.h"
 
+#include "../WebServer/MyPage.h" // my page
+
 #include <uri/UriGlob.h>
 
 
@@ -237,6 +239,9 @@ void WebServerInit()
   #ifdef WEBSERVER_DOWNLOAD
   web_server.on(F("/download"),    handle_download);
   #endif // ifdef WEBSERVER_DOWNLOAD
+  #ifdef WEBSERVER_MY
+  web_server.on(F("/mypage"), handle_mypage);
+  #endif
 
 #ifdef USES_C016
 
