@@ -95,7 +95,7 @@ void handle_tools() {
   # endif // ifdef WEBSERVER_SYSVARS
 
   #ifdef WEBSERVER_MY
-  addWideButtonPlusDescription(F("mypage"), F("My Page"), F("Open custom control page"));
+  addWideButtonPlusDescription(F("mypage"), F("Relay control"), F("Open custom control page"));
   #endif // WEBSERVER_MY
 
   addFormSubHeader(F("Wifi"));

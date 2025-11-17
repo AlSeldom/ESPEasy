@@ -16,7 +16,6 @@
 
 void handle_mypage() {
   if (!isLoggedIn()) { return; }
- 
 
   String cmd = webArg(F("cmd"));
   if (cmd.length() > 0) {
@@ -25,29 +24,62 @@ void handle_mypage() {
     printToWebJSON = false;
   }
 
-  addHtml(F("<form>"));
-  html_table_class_normal();
-
   navMenuIndex = MENU_INDEX_TOOLS;
   TXBuffer.startStream();
   sendHeadandTail_stdtemplate(_HEAD);
 
+  // --- Заголовок страницы ---
   addFormHeader(F("Relay pages"));
-  addHtml(F("<br><br>"));   // двойной перенос строки
+  addHtml(F("<br><br>"));   // отступ после заголовка
 
+  // --- Управление реле ---
   addFormSubHeader(F("Relay Control"));
-  addHtml(F("<br><br>"));   // двойной перенос строки
-  addButton(F("/mypage?cmd=GPIO,4,1"), F("Relay 1 ON"));
-  addButton(F("/mypage?cmd=GPIO,4,0"), F("Relay 1 OFF"));
+  addHtml(F("<br>"));       // отступ после подзаголовка
 
-  addHtml(F("<br><br>"));   // двойной перенос строки
-  // Если есть вывод команды — покажем его
+  // --- Реле 1 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,1"),
+                               F("Relay 1 ON"),
+                               F("Включить реле 1"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,0"),
+                               F("Relay 1 OFF"),
+                               F("Выключить реле 1"));
+  addHtml(F("<br>"));       // отступ между реле
+
+  // --- Реле 2 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,1"),
+                               F("Relay 2 ON"),
+                               F("Включить реле 2"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,0"),
+                               F("Relay 2 OFF"),
+                               F("Выключить реле 2"));
+  addHtml(F("<br>"));
+
+  // --- Реле 3 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,1"),
+                               F("Relay 3 ON"),
+                               F("Включить реле 3"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,0"),
+                               F("Relay 3 OFF"),
+                               F("Выключить реле 3"));
+  addHtml(F("<br>"));
+
+  // --- Реле 4 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,1"),
+                               F("Relay 4 ON"),
+                               F("Включить реле 4"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,0"),
+                               F("Relay 4 OFF"),
+                               F("Выключить реле 4"));
+  addHtml(F("<br><br>"));   // отступ перед выводом команд
+
+  // --- Вывод результата команды ---
   if (printWebString.length() > 0) {
-    //addHtml(F("<p>Command Output:<br><pre>"));
-    addHtml(F("<TR><TD colspan='2'>Command Output<BR><pre style='white-space:pre-wrap; word-wrap:break-word;'>"));
+    addFormSubHeader(F("Command Output"));
+    addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
+              "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
     addHtml(printWebString);
     addHtml(F("</pre>"));
-    addHtml(F("</TD></TR>"));
+    free_string(printWebString);
   }
 
   sendHeadandTail_stdtemplate(_TAIL);
