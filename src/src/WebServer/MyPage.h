@@ -1,12 +1,18 @@
-#ifndef WEBSERVER_WEBSERVER_MYPAGE_H
-#define WEBSERVER_WEBSERVER_MYPAGE_H
+#ifndef WEBSERVER_MYPAGE_H
+#define WEBSERVER_MYPAGE_H
 
 #include "../WebServer/common.h"
 
-
-#ifdef WEBSERVER_MY
+// Объявление твоей страницы
 void handle_mypage();
-#endif
 
+// Объявления кнопочных хелперов (если не подключаешь Markup_Buttons.h)
+void addWideButtonPlusDescription(const __FlashStringHelper * url,
+                                  const __FlashStringHelper * buttonText,
+                                  const __FlashStringHelper * description);
 
-#endif
+void addWideButtonPlusDescription(const String& url,
+                                  const String& buttonText,
+                                  const String& description);
+
+#endif // WEBSERVER_MYPAGE_H
