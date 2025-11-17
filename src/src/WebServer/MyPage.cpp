@@ -30,11 +30,11 @@ void handle_mypage() {
 
   // --- Заголовок страницы ---
   addFormHeader(F("Relay pages"));
-  addHtml(F("<br><br>"));   // отступ после заголовка
+  addHtml(F("<br><br>"));
 
   // --- Управление реле ---
   addFormSubHeader(F("Relay Control"));
-  addHtml(F("<br>"));       // отступ после подзаголовка
+  addHtml(F("<br>"));
 
   // --- Реле 1 ---
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,1"),
@@ -43,7 +43,9 @@ void handle_mypage() {
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,0"),
                                F("Relay 1 OFF"),
                                F("Выключить реле 1"));
-  addHtml(F("<br>"));       // отступ между реле
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(4) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
 
   // --- Реле 2 ---
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,1"),
@@ -52,7 +54,9 @@ void handle_mypage() {
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,0"),
                                F("Relay 2 OFF"),
                                F("Выключить реле 2"));
-  addHtml(F("<br>"));
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(5) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
 
   // --- Реле 3 ---
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,1"),
@@ -61,7 +65,9 @@ void handle_mypage() {
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,0"),
                                F("Relay 3 OFF"),
                                F("Выключить реле 3"));
-  addHtml(F("<br>"));
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(12) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
 
   // --- Реле 4 ---
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,1"),
@@ -70,7 +76,9 @@ void handle_mypage() {
   addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,0"),
                                F("Relay 4 OFF"),
                                F("Выключить реле 4"));
-  addHtml(F("<br><br>"));   // отступ перед выводом команд
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(13) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
 
   // --- Вывод результата команды ---
   if (printWebString.length() > 0) {
