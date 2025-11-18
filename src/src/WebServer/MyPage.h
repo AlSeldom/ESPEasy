@@ -6,7 +6,7 @@
 // Объявление твоей страницы
 void handle_mypage();
 
-// Объявления кнопочных хелперов (если не подключаешь Markup_Buttons.h)
+//Объявления кнопочных хелперов (если не подключаешь Markup_Buttons.h)
 void addWideButtonPlusDescription(const __FlashStringHelper * url,
                                   const __FlashStringHelper * buttonText,
                                   const __FlashStringHelper * description);

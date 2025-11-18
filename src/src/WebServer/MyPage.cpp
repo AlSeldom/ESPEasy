@@ -29,108 +29,152 @@ void handle_mypage() {
   sendHeadandTail_stdtemplate(_HEAD);
 
   // --- Заголовок страницы ---
-  addFormHeader(F("Relay pages"));
+  addFormHeader(F("Прямое управление периферией"));
   addHtml(F("<br><br>"));
 
   // --- Управление реле ---
-  addFormSubHeader(F("Relay Control"));
+  addFormSubHeader(F("Управление реле"));
   addHtml(F("<br>"));
 
+  // Начало таблицы
+  addHtml(F("<table style='width:100%; border-collapse:collapse;'>"));
+  addHtml(F("<tr><th>Реле</th><th>Управление</th><th>Состояние</th></tr>"));
+
   // --- Реле 1 ---
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,1"),
-                               F("Relay 1 ON"),
-                               F("Включить реле 1"));
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,0"),
-                               F("Relay 1 OFF"),
-                               F("Выключить реле 1"));
-  addHtml(F("Состояние: "));
-  addHtml(digitalRead(4) ? F("<b>ON</b>") : F("<b>OFF</b>"));
-  addHtml(F("<br><br>"));
+  addHtml(F("<tr><td>Relay 1</td><td>"));
+  addButton(F("/mypage?cmd=GPIO,4,1"), F("ON"));
+  addButton(F("/mypage?cmd=GPIO,4,0"), F("OFF"));
+  addHtml(F("</td><td>"));
+  addHtml(digitalRead(4) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
+                         : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
 
   // --- Реле 2 ---
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,1"),
-                               F("Relay 2 ON"),
-                               F("Включить реле 2"));
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,0"),
-                               F("Relay 2 OFF"),
-                               F("Выключить реле 2"));
-  addHtml(F("Состояние: "));
-  addHtml(digitalRead(5) ? F("<b>ON</b>") : F("<b>OFF</b>"));
-  addHtml(F("<br><br>"));
+  addHtml(F("<tr><td>Relay 2</td><td>"));
+  addButton(F("/mypage?cmd=GPIO,5,1"), F("ON"));
+  addButton(F("/mypage?cmd=GPIO,5,0"), F("OFF"));
+  addHtml(F("</td><td>"));
+  addHtml(digitalRead(5) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
+                         : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
 
   // --- Реле 3 ---
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,1"),
-                               F("Relay 3 ON"),
-                               F("Включить реле 3"));
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,0"),
-                               F("Relay 3 OFF"),
-                               F("Выключить реле 3"));
-  addHtml(F("Состояние: "));
-  addHtml(digitalRead(12) ? F("<b>ON</b>") : F("<b>OFF</b>"));
-  addHtml(F("<br><br>"));
+  addHtml(F("<tr><td>Relay 3</td><td>"));
+  addButton(F("/mypage?cmd=GPIO,12,1"), F("ON"));
+  addButton(F("/mypage?cmd=GPIO,12,0"), F("OFF"));
+  addHtml(F("</td><td>"));
+  addHtml(digitalRead(12) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
+                          : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
 
   // --- Реле 4 ---
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,1"),
-                               F("Relay 4 ON"),
-                               F("Включить реле 4"));
-  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,0"),
-                               F("Relay 4 OFF"),
-                               F("Выключить реле 4"));
-  addHtml(F("Состояние: "));
-  addHtml(digitalRead(13) ? F("<b>ON</b>") : F("<b>OFF</b>"));
-  addHtml(F("<br><br>"));
+  addHtml(F("<tr><td>Relay 4</td><td>"));
+  addButton(F("/mypage?cmd=GPIO,14,1"), F("ON"));
+  addButton(F("/mypage?cmd=GPIO,14,0"), F("OFF"));
+  addHtml(F("</td><td>"));
+  addHtml(digitalRead(14) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
+                          : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
+
+  // Конец таблицы
+  addHtml(F("</table><br><br>"));
 
   // --- Вывод результата команды ---
-  if (printWebString.length() > 0) {
-    addFormSubHeader(F("Command Output"));
-    addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
-              "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
-    addHtml(printWebString);
-    addHtml(F("</pre>"));
-    free_string(printWebString);
-  }
+  // if (printWebString.length() > 0) {
+  //   addFormSubHeader(F("Command Output"));
+  //   addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
+  //             "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
+  //   addHtml(printWebString);
+  //   addHtml(F("</pre>"));
+  //   free_string(printWebString);
+  // }
 
   sendHeadandTail_stdtemplate(_TAIL);
 }
 
-
 #endif // WEBSERVER_MY
 
-
-
-//======================================================================
+// ======================================Кружки вместо ON OFF
 // void handle_mypage() {
-//   if (!isLoggedIn()) { return; }   // проверка авторизации
+//   if (!isLoggedIn()) { return; }
 
-//   TXBuffer.startStream();          // начать формирование HTML
-//   sendHeadandTail_stdtemplate(_HEAD);
+//   String cmd = webArg(F("cmd"));
+//   if (cmd.length() > 0) {
+//     handle_command_from_web(EventValueSource::Enum::VALUE_SOURCE_WEB_FRONTEND, cmd);
+//     printToWeb     = false;
+//     printToWebJSON = false;
+//   }
 
-//   addFormHeader(F("My Custom Page"));
-//   addHtml(F("<p>Hello from MyPage!</p>"));
-
-//   sendHeadandTail_stdtemplate(_TAIL);
-// } 
-
-// #endif // WEBSERVER_MY
-//=========================================================================
-// void handle_mypage() {
-//   if (!isLoggedIn()) { return; }   // проверка авторизации
-
+//   navMenuIndex = MENU_INDEX_TOOLS;
 //   TXBuffer.startStream();
 //   sendHeadandTail_stdtemplate(_HEAD);
 
-//   addFormHeader(F("My Custom Page"));
-
-//   // --- Приветствие ---
-//   addHtml(F("<p>Hello from MyPage!</p>"));
+//   // --- Заголовок страницы ---
+//   addFormHeader(F("Relay pages"));
+//   addHtml(F("<br><br>"));
 
 //   // --- Управление реле ---
 //   addFormSubHeader(F("Relay Control"));
-//   addButton(F("/?cmd=GPIO,4,1&page=mypage"), F("Relay 1 ON"));
-//   addButton(F("/?cmd=GPIO,4,0&page=mypage"), F("Relay 1 OFF"));
+//   addHtml(F("<br>"));
+
+//   // Начало таблицы
+//   addHtml(F("<table style='width:100%; border-collapse:collapse;'>"));
+//   addHtml(F("<tr><th>Реле</th><th>Управление</th><th>Состояние</th></tr>"));
+
+//   // --- Реле 1 ---
+//   addHtml(F("<tr><td>Relay 1</td><td>"));
+//   addButton(F("/mypage?cmd=GPIO,4,1"), F("ON"));
+//   addButton(F("/mypage?cmd=GPIO,4,0"), F("OFF"));
+//   addHtml(F("</td><td>"));
+//   addHtml(digitalRead(4) 
+//           ? F("<span style='color:green;font-size:20px;'>&#9679;</span>")   // зелёный кружок
+//           : F("<span style='color:red;font-size:20px;'>&#9679;</span>"));   // красный кружок
+//   addHtml(F("</td></tr>"));
+
+//   // --- Реле 2 ---
+//   addHtml(F("<tr><td>Relay 2</td><td>"));
+//   addButton(F("/mypage?cmd=GPIO,5,1"), F("ON"));
+//   addButton(F("/mypage?cmd=GPIO,5,0"), F("OFF"));
+//   addHtml(F("</td><td>"));
+//   addHtml(digitalRead(5) 
+//           ? F("<span style='color:green;font-size:20px;'>&#9679;</span>")
+//           : F("<span style='color:red;font-size:20px;'>&#9679;</span>"));
+//   addHtml(F("</td></tr>"));
+
+//   // --- Реле 3 ---
+//   addHtml(F("<tr><td>Relay 3</td><td>"));
+//   addButton(F("/mypage?cmd=GPIO,12,1"), F("ON"));
+//   addButton(F("/mypage?cmd=GPIO,12,0"), F("OFF"));
+//   addHtml(F("</td><td>"));
+//   addHtml(digitalRead(12) 
+//           ? F("<span style='color:green;font-size:20px;'>&#9679;</span>")
+//           : F("<span style='color:red;font-size:20px;'>&#9679;</span>"));
+//   addHtml(F("</td></tr>"));
+
+//   // --- Реле 4 ---
+//   addHtml(F("<tr><td>Relay 4</td><td>"));
+//   addButton(F("/mypage?cmd=GPIO,13,1"), F("ON"));
+//   addButton(F("/mypage?cmd=GPIO,13,0"), F("OFF"));
+//   addHtml(F("</td><td>"));
+//   addHtml(digitalRead(13) 
+//           ? F("<span style='color:green;font-size:20px;'>&#9679;</span>")
+//           : F("<span style='color:red;font-size:20px;'>&#9679;</span>"));
+//   addHtml(F("</td></tr>"));
+
+//   // Конец таблицы
+//   addHtml(F("</table><br><br>"));
+
+//   // --- Вывод результата команды ---
+//   if (printWebString.length() > 0) {
+//     addFormSubHeader(F("Command Output"));
+//     addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
+//               "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
+//     addHtml(printWebString);
+//     addHtml(F("</pre>"));
+//     free_string(printWebString);
+//   }
 
 //   sendHeadandTail_stdtemplate(_TAIL);
 // }
 
-// #endif // WEBSERVER_MY
-// ======================================================================
+// ======================================Кружки вместо ON OFF

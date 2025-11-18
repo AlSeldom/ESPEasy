@@ -1,0 +1,136 @@
+#include "../WebServer/MyPage.h"
+
+#ifdef WEBSERVER_MY
+
+#include "../WebServer/ESPEasy_WebServer.h"
+#include "../WebServer/HTML_wrappers.h"
+#include "../WebServer/Markup.h"
+#include "../WebServer/Markup_Buttons.h"
+#include "../WebServer/Markup_Forms.h"
+#include "../Globals/ESPEasyWiFiEvent.h"
+#include "../Globals/ESPEasy_time.h"
+
+#include "../../ESPEasy-Globals.h"
+#include "../Commands/ExecuteCommand.h"
+#include "../Helpers/WebServer_commandHelper.h"   // обязательно подключить
+
+void handle_mypage() {
+  if (!isLoggedIn()) { return; }
+
+  String cmd = webArg(F("cmd"));
+  if (cmd.length() > 0) {
+    handle_command_from_web(EventValueSource::Enum::VALUE_SOURCE_WEB_FRONTEND, cmd);
+    printToWeb     = false;
+    printToWebJSON = false;
+  }
+
+  navMenuIndex = MENU_INDEX_TOOLS;
+  TXBuffer.startStream();
+  sendHeadandTail_stdtemplate(_HEAD);
+
+  // --- Заголовок страницы ---
+  addFormHeader(F("Relay pages"));
+  addHtml(F("<br><br>"));
+
+  // --- Управление реле ---
+  addFormSubHeader(F("Relay Control"));
+  addHtml(F("<br>"));
+
+  // --- Реле 1 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,1"),
+                               F("ON"),
+                               F("реле 1"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,4,0"),
+                               F("OFF"),
+                               F("реле 1"));
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(4) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
+
+  // --- Реле 2 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,1"),
+                               F("Relay 2 ON"),
+                               F("Включить реле 2"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,5,0"),
+                               F("Relay 2 OFF"),
+                               F("Выключить реле 2"));
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(5) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
+
+  // --- Реле 3 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,1"),
+                               F("Relay 3 ON"),
+                               F("Включить реле 3"));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,12,0"),
+                               F("Relay 3 OFF"),
+                               F("Выключить реле 3"));
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(12) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
+
+  // --- Реле 4 ---
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,1"),
+                               F("Relay 4 ON"),
+                               F(""));
+  addWideButtonPlusDescription(F("/mypage?cmd=GPIO,14,0"),
+                               F("Relay 4 OFF"),
+                               F(""));                            
+  addHtml(F("Состояние: "));
+  addHtml(digitalRead(14) ? F("<b>ON</b>") : F("<b>OFF</b>"));
+  addHtml(F("<br><br>"));
+
+  // --- Вывод результата команды ---
+  if (printWebString.length() > 0) {
+    addFormSubHeader(F("Command Output"));
+    addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
+              "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
+    addHtml(printWebString);
+    addHtml(F("</pre>"));
+    free_string(printWebString);
+  }
+
+  sendHeadandTail_stdtemplate(_TAIL);
+}
+
+
+#endif // WEBSERVER_MY
+
+
+
+//======================================================================
+// void handle_mypage() {
+//   if (!isLoggedIn()) { return; }   // проверка авторизации
+
+//   TXBuffer.startStream();          // начать формирование HTML
+//   sendHeadandTail_stdtemplate(_HEAD);
+
+//   addFormHeader(F("My Custom Page"));
+//   addHtml(F("<p>Hello from MyPage!</p>"));
+
+//   sendHeadandTail_stdtemplate(_TAIL);
+// } 
+
+// #endif // WEBSERVER_MY
+//=========================================================================
+// void handle_mypage() {
+//   if (!isLoggedIn()) { return; }   // проверка авторизации
+
+//   TXBuffer.startStream();
+//   sendHeadandTail_stdtemplate(_HEAD);
+
+//   addFormHeader(F("My Custom Page"));
+
+//   // --- Приветствие ---
+//   addHtml(F("<p>Hello from MyPage!</p>"));
+
+//   // --- Управление реле ---
+//   addFormSubHeader(F("Relay Control"));
+//   addButton(F("/?cmd=GPIO,4,1&page=mypage"), F("Relay 1 ON"));
+//   addButton(F("/?cmd=GPIO,4,0&page=mypage"), F("Relay 1 OFF"));
+
+//   sendHeadandTail_stdtemplate(_TAIL);
+// }
+
+// #endif // WEBSERVER_MY
+// ======================================================================
