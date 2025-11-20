@@ -14,6 +14,42 @@
 #include "../Commands/ExecuteCommand.h"
 #include "../Helpers/WebServer_commandHelper.h"   // обязательно подключить
 
+#include <Arduino.h>
+
+#include "../ESPEasyCore/ESPEasyRules.h"
+#include "../Commands/ExecuteCommand.h"
+#include "../DataTypes/EventValueSource.h"
+#include "../Globals/Settings.h"
+#include "../Helpers/RulesHelper.h"   // форматирование значений
+#include "../Globals/Cache.h"          // имена Value (не обязательно, но полезно)
+
+// ========================Logic=======================================
+void updateRelayLogic(int uiTaskNr, const char* deviceName, int relayGpio) {
+  EventStruct ev;
+  ev.TaskIndex = uiTaskNr - 1;   // UI Task Nr → внутренний индекс
+
+  // Получаем текущее значение Value1 (обычно "State")
+  String stateStr = formatUserVarNoCheck(&ev, 0);
+  bool state = (stateStr == F("1"));
+
+  if (state) {
+    // Генерируем событие для Rules
+    rulesProcessing(String(deviceName) + F("#State=1"));
+
+    // Управляем реле
+    String cmd = String("GPIO,") + relayGpio + ",1";
+    ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
+                   cmd.c_str(), true, true, true, false);
+  } else {
+    rulesProcessing(String(deviceName) + F("#State=0"));
+
+    String cmd = String("GPIO,") + relayGpio + ",0";
+    ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
+                   cmd.c_str(), true, true, true, false);
+  }
+}
+// ========================end Logic===================================
+
 void handle_mypage() {
   if (!isLoggedIn()) { return; }
 

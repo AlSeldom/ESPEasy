@@ -21,9 +21,8 @@
 #include "../Helpers/Networking.h"
 #include "../Helpers/PeriodicalActions.h"
 #include "../Helpers/StringConverter.h"
-
-
 #include "../Commands/InternalCommands_decoder.h"
+#include "../WebServer/MyPage.h"
 
 void updateLoopStats() {
   ++loopCounter;
@@ -173,6 +172,12 @@ void ESPEasy_loop()
   // Calls above may have received/generated commands for the command queue, thus need to process them.
   processExecuteCommandQueue();
   backgroundtasks();
+
+  // Вызов моей логики управления реле
+  // Для первого выключателя (Task Nr = 6 в UI, имя sw1, реле на GPIO4)
+  updateRelayLogic(6, "sw1", 4); // Seldom
+  // Для второго выключателя (Task Nr = 7 в UI, имя sw2, реле на GPIO5)
+  updateRelayLogic(7, "sw2", 5);
 
   if (readyForSleep()) {
     prepare_deepSleep(Settings.Delay);
