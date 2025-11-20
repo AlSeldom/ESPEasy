@@ -31,63 +31,103 @@ void handle_mypage() {
   // --- Заголовок страницы ---
   addFormHeader(F("Прямое управление периферией"));
   addHtml(F("<br><br>"));
+  // ----Добавим выключатели-----------------------------------------------------------
+  
+  addFormSubHeader(F("Выключатели"));
+  addHtml(F("<br>"));
+
+  // Начало таблицы
+  addHtml(F("<table style='width:98%; border-collapse:collapse; border:1px solid gray;'>"));
+
+  // Заголовки
+  addHtml(F("<tr style='background-color:#f0f0f0;'>"
+          "<th style='width:50%; text-align:center; vertical-align:middle; border:1px solid gray;'>Выключатель</th>"
+          "<th style='width:50%; text-align:center; vertical-align:middle; border:1px solid gray;'>Состояние</th>"
+          "</tr>"));
+
+  // --- Выключатель 1 ---
+  addHtml(F("<tr>"
+          "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Выключатель 1</td>"
+          "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
+  addHtml(digitalRead(13) ? 
+        F("<span style='color:green;font-weight:bold;'>ON</span>") :
+        F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
+
+  // --- Выключатель 2 ---
+  addHtml(F("<tr>"
+          "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Выключатель 2</td>"
+          "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
+  addHtml(digitalRead(2) ? 
+        F("<span style='color:green;font-weight:bold;'>ON</span>") :
+        F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+  addHtml(F("</td></tr>"));
+  // Конец таблицы
+  addHtml(F("</table><br><br>"));
+
+
+  // ----Добавим выключатели-----------------------------------------------------------
 
   // --- Управление реле ---
   addFormSubHeader(F("Управление реле"));
   addHtml(F("<br>"));
 
   // Начало таблицы
-  addHtml(F("<table style='width:100%; border-collapse:collapse;'>"));
-  addHtml(F("<tr><th>Реле</th><th>Управление</th><th>Состояние</th></tr>"));
+  addHtml(F("<table style='width:98%; border-collapse:collapse; border:1px solid gray;'>"));
+
+  // Заголовки
+  addHtml(F("<tr style='background-color:#f0f0f0;'>"
+            "<th style='width:33%; text-align:center; vertical-align:middle; border:1px solid gray;'>Реле</th>"
+            "<th style='width:33%; text-align:center; vertical-align:middle; border:1px solid gray;'>Управление</th>"
+            "<th style='width:33%; text-align:center; vertical-align:middle; border:1px solid gray;'>Состояние</th>"
+            "</tr>"));
 
   // --- Реле 1 ---
-  addHtml(F("<tr><td>Relay 1</td><td>"));
+  addHtml(F("<tr>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Relay 1</td>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addButton(F("/mypage?cmd=GPIO,4,1"), F("ON"));
   addButton(F("/mypage?cmd=GPIO,4,0"), F("OFF"));
-  addHtml(F("</td><td>"));
+  addHtml(F("</td><td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addHtml(digitalRead(4) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
-                         : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+                        : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
   addHtml(F("</td></tr>"));
 
   // --- Реле 2 ---
-  addHtml(F("<tr><td>Relay 2</td><td>"));
+  addHtml(F("<tr>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Relay 2</td>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addButton(F("/mypage?cmd=GPIO,5,1"), F("ON"));
   addButton(F("/mypage?cmd=GPIO,5,0"), F("OFF"));
-  addHtml(F("</td><td>"));
+  addHtml(F("</td><td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addHtml(digitalRead(5) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
-                         : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
+                        : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
   addHtml(F("</td></tr>"));
 
   // --- Реле 3 ---
-  addHtml(F("<tr><td>Relay 3</td><td>"));
+  addHtml(F("<tr>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Relay 3</td>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addButton(F("/mypage?cmd=GPIO,12,1"), F("ON"));
   addButton(F("/mypage?cmd=GPIO,12,0"), F("OFF"));
-  addHtml(F("</td><td>"));
+  addHtml(F("</td><td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addHtml(digitalRead(12) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
                           : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
   addHtml(F("</td></tr>"));
 
   // --- Реле 4 ---
-  addHtml(F("<tr><td>Relay 4</td><td>"));
+  addHtml(F("<tr>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>Relay 4</td>"
+            "<td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addButton(F("/mypage?cmd=GPIO,14,1"), F("ON"));
   addButton(F("/mypage?cmd=GPIO,14,0"), F("OFF"));
-  addHtml(F("</td><td>"));
+  addHtml(F("</td><td style='text-align:center; vertical-align:middle; border:1px solid gray;'>"));
   addHtml(digitalRead(14) ? F("<span style='color:green;font-weight:bold;'>ON</span>")
                           : F("<span style='color:red;font-weight:bold;'>OFF</span>"));
   addHtml(F("</td></tr>"));
 
   // Конец таблицы
   addHtml(F("</table><br><br>"));
-
-  // --- Вывод результата команды ---
-  // if (printWebString.length() > 0) {
-  //   addFormSubHeader(F("Command Output"));
-  //   addHtml(F("<pre style='width:98%; background:#f0f0f0; border:1px solid #ccc; "
-  //             "padding:5px; white-space:pre-wrap; word-wrap:break-word;'>"));
-  //   addHtml(printWebString);
-  //   addHtml(F("</pre>"));
-  //   free_string(printWebString);
-  // }
 
   sendHeadandTail_stdtemplate(_TAIL);
 }
