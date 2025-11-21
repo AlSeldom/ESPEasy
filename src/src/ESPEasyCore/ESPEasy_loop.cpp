@@ -174,10 +174,10 @@ void ESPEasy_loop()
   backgroundtasks();
 
   // Вызов моей логики управления реле
-  // Для первого выключателя (Task Nr = 6 в UI, имя sw1, реле на GPIO4)
-  updateRelayLogic(6, "sw1", 4); // Seldom
-  // Для второго выключателя (Task Nr = 7 в UI, имя sw2, реле на GPIO5)
-  updateRelayLogic(7, "sw2", 5);
+  // sw1 → TaskNr=6 → управляет реле на GPIO4
+  updateRelayLogic(6, "sw1", 4, lastPressed_sw1, relayState_sw1);
+ // sw2 → TaskNr=7 → управляет реле на GPIO5
+  updateRelayLogic(7, "sw2", 5, lastPressed_sw2, relayState_sw2);
 
   if (readyForSleep()) {
     prepare_deepSleep(Settings.Delay);

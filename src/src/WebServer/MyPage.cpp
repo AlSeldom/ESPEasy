@@ -15,7 +15,7 @@
 #include "../Helpers/WebServer_commandHelper.h"   // обязательно подключить
 
 #include <Arduino.h>
-
+#include "../Globals/MQTT.h"
 #include "../ESPEasyCore/ESPEasyRules.h"
 #include "../Commands/ExecuteCommand.h"
 #include "../DataTypes/EventValueSource.h"
@@ -23,31 +23,47 @@
 #include "../Helpers/RulesHelper.h"   // форматирование значений
 #include "../Globals/Cache.h"          // имена Value (не обязательно, но полезно)
 
-// ========================Logic=======================================
-void updateRelayLogic(int uiTaskNr, const char* deviceName, int relayGpio) {
+// ========================Logic выключатель без фиксациии =======================================
+#include "../Globals/Logging.h"
+
+// глобальные переменные для sw1
+bool lastPressed_sw1 = false;
+bool relayState_sw1 = false;
+
+// глобальные переменные для sw2
+bool lastPressed_sw2 = false;
+bool relayState_sw2 = false;
+
+void updateRelayLogic(int uiTaskNr, const char* deviceName, int relayGpio,
+                      bool &lastPressed, bool &relayState) {
+  if (MQTTclient.connected()) {
+    addLog(LOG_LEVEL_INFO, F("MQTT connected → skip local relay logic"));
+    return;
+  }
+
   EventStruct ev;
-  ev.TaskIndex = uiTaskNr - 1;   // UI Task Nr → внутренний индекс
+  ev.TaskIndex = uiTaskNr - 1;   // TaskNr → индекс
 
-  // Получаем текущее значение Value1 (обычно "State")
   String stateStr = formatUserVarNoCheck(&ev, 0);
-  bool state = (stateStr == F("1"));
+  bool pressed = (stateStr == F("1"));
 
-  if (state) {
-    // Генерируем событие для Rules
+  // реагируем только на переход 0 → 1
+  if (pressed && !lastPressed) {
     rulesProcessing(String(deviceName) + F("#State=1"));
 
-    // Управляем реле
-    String cmd = String("GPIO,") + relayGpio + ",1";
-    ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
-                   cmd.c_str(), true, true, true, false);
-  } else {
-    rulesProcessing(String(deviceName) + F("#State=0"));
+    relayState = !relayState; // toggle
 
-    String cmd = String("GPIO,") + relayGpio + ",0";
+    String cmd = String("GPIO,") + relayGpio + (relayState ? ",1" : ",0");
     ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
                    cmd.c_str(), true, true, true, false);
+
+    addLog(LOG_LEVEL_INFO,
+           String(deviceName) + F(" → Toggle relay, new state=") + (relayState ? "ON" : "OFF"));
   }
+
+  lastPressed = pressed;
 }
+
 // ========================end Logic===================================
 
 void handle_mypage() {
@@ -254,3 +270,40 @@ void handle_mypage() {
 // }
 
 // ======================================Кружки вместо ON OFF
+
+
+
+// ========================Logic выключатель с фиксацией =======================================
+// void updateRelayLogic(int uiTaskNr, const char* deviceName, int relayGpio) {
+//   // Проверка MQTT
+//   if (MQTTclient.connected()) {
+//     addLog(LOG_LEVEL_INFO, F("MQTT connected → skip local relay logic"));
+//     return; // если MQTT доступен, не выполняем локальную логику
+//   }
+
+//   EventStruct ev;
+//   ev.TaskIndex = uiTaskNr - 1;   // UI Task Nr → внутренний индекс
+
+//   // Получаем текущее значение Value1 (обычно "State")
+//   String stateStr = formatUserVarNoCheck(&ev, 0);
+//   bool state = (stateStr == F("1"));
+
+//   if (state) {
+//     rulesProcessing(String(deviceName) + F("#State=1"));
+
+//     String cmd = String("GPIO,") + relayGpio + ",1";
+//     ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
+//                    cmd.c_str(), true, true, true, false);
+
+//     addLog(LOG_LEVEL_INFO, String(deviceName) + F(" → Relay ON"));
+//   } else {
+//     rulesProcessing(String(deviceName) + F("#State=0"));
+
+//     String cmd = String("GPIO,") + relayGpio + ",0";
+//     ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
+//                    cmd.c_str(), true, true, true, false);
+
+//     addLog(LOG_LEVEL_INFO, String(deviceName) + F(" → Relay OFF"));
+//   }
+// }
+// ========================end Logic===================================
