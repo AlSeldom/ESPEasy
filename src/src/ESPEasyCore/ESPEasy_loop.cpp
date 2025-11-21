@@ -173,7 +173,7 @@ void ESPEasy_loop()
   processExecuteCommandQueue();
   backgroundtasks();
 
-  // Вызов моей логики управления реле
+  // Вызов моей логики управления реле Seldom
   // sw1 → TaskNr=6 → управляет реле на GPIO4
   updateRelayLogic(6, "sw1", 4, lastPressed_sw1, relayState_sw1);
  // sw2 → TaskNr=7 → управляет реле на GPIO5

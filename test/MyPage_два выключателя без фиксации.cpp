@@ -34,33 +34,36 @@ bool relayState_sw1 = false;
 bool lastPressed_sw2 = false;
 bool relayState_sw2 = false;
 
-void updateRelayLogic(int uiTaskNr,
-                      const char* deviceName,
-                      int relayGpio,
-                      bool &lastPressed,
-                      bool &relayState) {
-  if (MQTTclient.connected()) return;
+void updateRelayLogic(int uiTaskNr, const char* deviceName, int relayGpio,
+                      bool &lastPressed, bool &relayState) {
+  if (MQTTclient.connected()) {
+    addLog(LOG_LEVEL_INFO, F("MQTT connected → skip local relay logic"));
+    return;
+  }
 
   EventStruct ev;
-  ev.TaskIndex = uiTaskNr - 1;
+  ev.TaskIndex = uiTaskNr - 1;   // TaskNr → индекс
 
   String stateStr = formatUserVarNoCheck(&ev, 0);
   bool pressed = (stateStr == F("1"));
 
+  // реагируем только на переход 0 → 1
   if (pressed && !lastPressed) {
-    relayState = !relayState;
+    rulesProcessing(String(deviceName) + F("#State=1"));
+
+    relayState = !relayState; // toggle
 
     String cmd = String("GPIO,") + relayGpio + (relayState ? ",1" : ",0");
     ExecuteCommand(0, EventValueSource::Enum::VALUE_SOURCE_SYSTEM,
                    cmd.c_str(), true, true, true, false);
 
     addLog(LOG_LEVEL_INFO,
-           String(deviceName) + F(" → Toggle relay, new state=")
-           + (relayState ? "ON" : "OFF"));
+           String(deviceName) + F(" → Toggle relay, new state=") + (relayState ? "ON" : "OFF"));
   }
 
   lastPressed = pressed;
 }
+
 // ========================end Logic===================================
 
 void handle_mypage() {
